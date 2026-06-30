@@ -40,7 +40,7 @@ npm start
 O servidor será executado em:
 
 ```text
-http://localhost:3000
+http://localhost:18081
 ```
 
 Para iniciar o frontend em modo de desenvolvimento:

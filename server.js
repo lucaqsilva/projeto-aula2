@@ -1,8 +1,11 @@
 const express = require("express");
 const cors = require("cors");
+const fs = require("fs");
+const path = require("path");
 
 const app = express();
-const PORT = 3000;
+const PORT = 18081;
+const distPath = path.join(__dirname, "dist");
 
 app.use(cors());
 app.use(express.json());
@@ -17,8 +20,8 @@ let tasks = [
 
 let nextId = 2;
 
-// Rota inicial
-app.get("/", (req, res) => {
+// Rota inicial da API
+app.get("/api", (req, res) => {
   res.send("API TodoApp rodando!");
 });
 
@@ -93,6 +96,18 @@ app.delete("/api/tasks/:id", (req, res) => {
 
   res.json({ message: "Tarefa removida com sucesso" });
 });
+
+if (fs.existsSync(distPath)) {
+  app.use(express.static(distPath));
+
+  app.get("*", (req, res) => {
+    res.sendFile(path.join(distPath, "index.html"));
+  });
+} else {
+  app.get("/", (req, res) => {
+    res.send("API TodoApp rodando! Execute npm run build para gerar o frontend.");
+  });
+}
 
 app.listen(PORT, () => {
   console.log(`Servidor rodando em http://localhost:${PORT}`);
